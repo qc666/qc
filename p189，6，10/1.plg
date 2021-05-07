@@ -1,0 +1,44 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: 1 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\Users\H3CVDI~1.000\AppData\Local\Temp\RSP7E0E.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/1.pdb" /debug /machine:I386 /out:"Debug/1.exe" /pdbtype:sept 
+".\Debug\1.obj"
+]
+Creating command line "link.exe @C:\Users\H3CVDI~1.000\AppData\Local\Temp\RSP7E0E.tmp"
+<h3>Output Window</h3>
+Linking...
+
+LINK : error : Internal error during SetupPhase
+
+  ExceptionCode            = C0000006
+  ExceptionFlags           = 00000000
+  ExceptionAddress         = 00451A5F
+  NumberParameters         = 00000003
+  ExceptionInformation[ 0] = 00000001
+  ExceptionInformation[ 1] = 3FFF0000
+  ExceptionInformation[ 2] = C00000E7
+
+CONTEXT:
+  Eax    = 00000000  Esp    = 0018F788
+  Ebx    = 00000000  Ebp    = 0018FAA4
+  Ecx    = 000000AB  Esi    = 000002AC
+  Edx    = 3FFF0000  Edi    = 3FFF0000
+  Eip    = 00451A5F  EFlags = 00010202
+  SegCs  = 00000023  SegDs  = 0000002B
+  SegSs  = 0000002B  SegEs  = 0000002B
+  SegFs  = 00000053  SegGs  = 0000002B
+  Dr0    = 0018F788  Dr3    = 00000000
+  Dr1    = 0018FAA4  Dr6    = 000000AB
+  Dr2    = 00000000  Dr7    = 00000000
+Error executing link.exe.
+
+</pre>
+</body>
+</html>
