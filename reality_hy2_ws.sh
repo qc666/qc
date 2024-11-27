@@ -397,8 +397,10 @@ cat << EOF
     "inbounds": [
         {
             "type": "tun",
-            "inet4_address": "172.19.0.1/30",
-            "inet6_address": "2001:0470:f9da:fdfa::1/64",
+             "address": [
+                       "172.19.0.1/30",
+                       "fdfe:dcba:9876::1/126"
+            ],
             "sniff": true,
             "sniff_override_destination": true,
             "domain_strategy": "prefer_ipv4",
@@ -429,16 +431,9 @@ cat << EOF
             "users": []
         }
     ],
-  "experimental": {
-    "clash_api": {
-      "external_controller": "127.0.0.1:9090",
-      "secret": "",
-      "store_selected": true
-    }
-  },
   "log": {
     "disabled": false,
-    "level": "info",
+    "level": "error",
     "timestamp": true
   },
   "outbounds": [
