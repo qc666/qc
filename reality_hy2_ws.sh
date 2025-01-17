@@ -375,7 +375,7 @@ cat << EOF
             "server": "google"
 	    },
             {
-            "rule_set": "geosite-cn",
+            "rule_set": "geoip-cn",
             "server": "local"
 	    }
         ],
@@ -528,7 +528,7 @@ cat << EOF
   "route": {
     "rules": [
       {
-        "geosite": "geosite-category-ads-all",
+        "rule_set": "geosite-category-ads-all",
         "outbound": "block"
       },
       {
