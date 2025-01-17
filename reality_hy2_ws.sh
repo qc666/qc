@@ -348,93 +348,89 @@ EOF
 show_notice "sing-box客户端配置参数"
 cat << EOF
 {
-  "dns": {
-    "servers": [
-      {
-        "tag": "remote",
-        "address": "https://8.8.8.8/dns-query"
-      },
-      {
-        "tag": "local",
-        "address": "https://223.5.5.5/dns-query"
-      },
-      {
-        "address": "rcode://success",
-        "tag": "block"
-      }
-    ],
-    "rules": [
-      {
-        "outbound": "local",
-        "geosite": [
-          "cn"
-        ]
-      },
-      {
-        "outbound": "block",
-        "geosite": [
-          "category-ads-all"
+    "dns": {
+        "servers": [
+            {
+                "tag": "remote",
+                "address": "https://8.8.8.8/dns-query",
+                "detour": "select"
+            },
+            {
+                "tag": "local",
+                "address": "https://223.5.5.5/dns-query",
+                "detour": "direct"
+            },
+            {
+                "address": "rcode://success",
+                "tag": "block"
+            }
         ],
-        "disable_cache": true
-      },
-      {
-        "outbound": "select",
-        "clash_mode": "global"
-      },
-      {
-        "outbound": "local",
-        "clash_mode": "direct"
-      }
-    ],
-    "strategy": "prefer_ipv4"
-  },
-  "inbounds": [
-    {
-      "type": "mixed",
-      "tag": "in"
-    }
-  ],
-  "route": {
-    "auto_detect_interface": true,
-    "rules": [
-      {
-        "inbound": "in",
-        "action": "resolve",
+        "rules": [
+            {
+                "outbound": [
+                    "any"
+                ],
+                "server": "local"
+            },
+            {
+                "disable_cache": true,
+                "geosite": [
+                    "category-ads-all"
+                ],
+                "server": "block"
+            },
+            {
+                "clash_mode": "global",
+                "server": "remote"
+            },
+            {
+                "clash_mode": "direct",
+                "server": "local"
+            },
+            {
+                "geosite": "cn",
+                "server": "local"
+            }
+        ],
         "strategy": "prefer_ipv4"
-      },
-      {
-        "inbound": "in",
-        "action": "sniff",
-        "timeout": "1s"
-      },
-      {
-        "action": "route-options",  // 或 "action": "route"
-        "override_address": "1.1.1.1",
-        "override_port": 443
-      }
+    },
+    "inbounds": [
+        {
+            "type": "tun",
+             "address": [
+                       "172.19.0.1/30",
+                       "fdfe:dcba:9876::1/126"
+            ],
+            "sniff": true,
+            "sniff_override_destination": true,
+            "domain_strategy": "prefer_ipv4",
+            "stack": "mixed",
+            "strict_route": true,
+            "mtu": 9000,
+            "endpoint_independent_nat": true,
+            "auto_route": true
+        },
+        {
+            "type": "socks",
+            "tag": "socks-in",
+            "listen": "127.0.0.1",
+            "sniff": true,
+            "sniff_override_destination": true,
+            "domain_strategy": "prefer_ipv4",
+            "listen_port": 2333,
+            "users": []
+        },
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "sniff": true,
+            "sniff_override_destination": true,
+            "domain_strategy": "prefer_ipv4",
+            "listen": "127.0.0.1",
+            "listen_port": 2334,
+            "users": []
+        }
     ],
-    "rule_set": [
-      {
-        "tag": "geoip-cn",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
-        "download_detour": "proxy"
-      },
-      {
-        "tag": "geoip-us",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-us.srs",
-        "download_detour": "proxy"
-      }
-    ]
-  },
-  "experimental": {
-    "cache_file": {
-      "enabled": true // required to save rule-set cache
-    }
-  },
   "log": {
     "disabled": false,
     "level": "error",
@@ -459,7 +455,7 @@ cat << EOF
       "flow": "xtls-rprx-vision",
       "packet_encoding": "xudp",
       "server": "$server_ip",
-      "server_port": "$current_listen_port",
+      "server_port": $current_listen_port,
       "tls": {
         "enabled": true,
         "server_name": "$current_server_name",
@@ -475,48 +471,49 @@ cat << EOF
       }
     },
     {
-      "type": "hysteria2",
-      "server": "$server_ip",
-      "server_port": "$hy_current_listen_port",
-      "tag": "sing-box-hysteria2",
-      "up_mbps": 100,
-      "down_mbps": 100,
-      "password": "$hy_password",
-      "tls": {
-        "enabled": true,
-        "server_name": "$hy_current_server_name",
-        "insecure": true,
-        "alpn": [
-          "h3"
-        ]
-      }
-    },
-    {
-      "type": "vmess",
-      "server": "speed.cloudflare.com",
-      "server_port": 443,
-      "tag": "sing-box-vmess",
-      "tls": {
-        "enabled": true,
-        "server_name": "$argo",
-        "insecure": true,
-        "utls": {
-          "enabled": true,
-          "fingerprint": "chrome"
-        }
-      },
-      "transport": {
-        "headers": {
-          "Host": [
-            "$argo"
-          ]
+            "type": "hysteria2",
+            "server": "$server_ip",
+            "server_port": $hy_current_listen_port,
+            "tag": "sing-box-hysteria2",
+            
+            "up_mbps": 100,
+            "down_mbps": 100,
+            "password": "$hy_password",
+            "tls": {
+                "enabled": true,
+                "server_name": "$hy_current_server_name",
+                "insecure": true,
+                "alpn": [
+                    "h3"
+                ]
+            }
         },
-        "path": "$ws_path",
-        "type": "ws"
-      },
-      "security": "auto",
-      "uuid": "$vmess_uuid"
-    },
+        {
+            "server": "speed.cloudflare.com",
+            "server_port": 443,
+            "tag": "sing-box-vmess",
+            "tls": {
+                "enabled": true,
+                "server_name": "$argo",
+                "insecure": true,
+                "utls": {
+                    "enabled": true,
+                    "fingerprint": "chrome"
+                }
+            },
+            "transport": {
+                "headers": {
+                    "Host": [
+                        "$argo"
+                    ]
+                },
+                "path": "$ws_path",
+                "type": "ws"
+            },
+            "type": "vmess",
+            "security": "auto",
+            "uuid": "$vmess_uuid"
+        },
     {
       "tag": "direct",
       "type": "direct"
@@ -543,35 +540,43 @@ cat << EOF
     "auto_detect_interface": true,
     "rules": [
       {
-        "ip_is_private": true,
-        "outbound": "direct"
-      },
-      {
-        "rule_set": "geoip-cn",
-        "outbound": "direct"
-      },
-      {
-        "rule_set": "geoip-us",
-        "rule_set_ipcidr_match_source": true,
+        "geosite": "category-ads-all",
         "outbound": "block"
+      },
+      {
+        "outbound": "dns-out",
+        "protocol": "dns"
+      },
+      {
+        "clash_mode": "direct",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "global",
+        "outbound": "select"
+      },
+      {
+        "geoip": [
+          "cn",
+          "private"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "geosite": "geolocation-!cn",
+        "outbound": "select"
+      },
+      {
+        "geosite": "cn",
+        "outbound": "direct"
       }
     ],
-    "rule_set": [
-      {
-        "tag": "geoip-cn",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
-        "download_detour": "proxy"
-      },
-      {
-        "tag": "geoip-us",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-us.srs",
-        "download_detour": "proxy"
-      }
-    ]
+    "geoip": {
+            "download_detour": "select"
+        },
+    "geosite": {
+            "download_detour": "select"
+        }
   }
 }
 
