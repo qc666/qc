@@ -351,7 +351,7 @@ cat << EOF
     "dns": {
         "servers": [
             {
-                "tag": "remote",
+                "tag": "google",
                 "address": "https://8.8.8.8/dns-query",
                 "detour": "select"
             },
@@ -375,13 +375,13 @@ cat << EOF
             {
                 "disable_cache": true,
                 "geosite": [
-                    "category-ads-all"
+                    "geosite-category-ads-all"
                 ],
                 "server": "block"
             },
             {
                 "clash_mode": "global",
-                "server": "remote"
+                "server": "google"
             },
             {
                 "clash_mode": "direct",
@@ -392,6 +392,8 @@ cat << EOF
                 "server": "local"
             }
         ],
+	"final": "google",
+        "disable_cache": true,
         "strategy": "prefer_ipv4"
     },
     "inbounds": [
@@ -537,10 +539,9 @@ cat << EOF
     }
   ],
   "route": {
-    "auto_detect_interface": true,
     "rules": [
       {
-        "geosite": "category-ads-all",
+        "geosite": "geosite-category-ads-all",
         "outbound": "block"
       },
       {
@@ -556,27 +557,41 @@ cat << EOF
         "outbound": "select"
       },
       {
-        "geoip": [
-          "cn",
-          "private"
+        "rule_set": [
+             "geoip-cn"
         ],
         "outbound": "direct"
       },
       {
-        "geosite": "geolocation-!cn",
+        "rule_set": [
+             "geosite-gfw"
+        ],
         "outbound": "select"
       },
-      {
-        "geosite": "cn",
-        "outbound": "direct"
-      }
     ],
-    "geoip": {
-            "download_detour": "select"
-        },
-    "geosite": {
-            "download_detour": "select"
-        }
+ "rule_set": [
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "download_detour": "select"
+      },
+      {
+        "tag": "geosite-gfw",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/sing/geo/geosite/gfw.srs",
+        "download_detour": "select"
+      },
+      {
+        "tag": "geosite-category-ads-all",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "download_detour": "select"
+      }
+    ]
   }
 }
 
