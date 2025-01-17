@@ -373,6 +373,10 @@ cat << EOF
 	    {
             "rule_set": "geosite-gfw",
             "server": "google"
+	    },
+            {
+            "rule_set": "geosite-cn",
+            "server": "local"
 	    }
         ],
 	"final": "google",
