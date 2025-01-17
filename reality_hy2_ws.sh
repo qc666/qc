@@ -580,7 +580,7 @@ cat << EOF
       }
     ],
     "final": "direct",
-    "auto_detect_interface": true;
+    "auto_detect_interface": true
   }
 }
 
