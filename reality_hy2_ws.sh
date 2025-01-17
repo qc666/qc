@@ -367,30 +367,13 @@ cat << EOF
         ],
         "rules": [
             {
-                "outbound": [
-                    "any"
-                ],
-                "server": "local"
-            },
-            {
-                "disable_cache": true,
-                "geosite": [
-                    "geosite-category-ads-all"
-                ],
+                "rule_set": "geosite-category-ads-all",
                 "server": "block"
             },
-            {
-                "clash_mode": "global",
-                "server": "google"
-            },
-            {
-                "clash_mode": "direct",
-                "server": "local"
-            },
-            {
-                "geosite": "cn",
-                "server": "local"
-            }
+	    {
+            "rule_set": "geosite-gfw",
+            "server": "google"
+	    }
         ],
 	"final": "google",
         "disable_cache": true,
