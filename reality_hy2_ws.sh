@@ -901,7 +901,7 @@ jq -n --arg listen_port "$listen_port" --arg vmess_port "$vmess_port" --arg vmes
         "download_detour": "direct"
       }
     ],
-    "final": "direct",
+    "final": "direct"
   }
 }' > /root/sbox/sbconfig_server.json
 
