@@ -579,6 +579,8 @@ cat << EOF
         "download_detour": "select"
       }
     ]
+    "final": "direct",
+    "auto_detect_interface": true;
   }
 }
 
