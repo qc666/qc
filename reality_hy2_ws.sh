@@ -578,7 +578,7 @@ cat << EOF
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
         "download_detour": "select"
       }
-    ]
+    ],
     "final": "direct",
     "auto_detect_interface": true;
   }
@@ -881,6 +881,28 @@ jq -n --arg listen_port "$listen_port" --arg vmess_port "$vmess_port" --arg vmes
       "tag": "block"
     }
   ]
+"route": {
+    "rules": [
+      {
+        "rule_set": "geosite-category-ads-all",
+        "outbound": "block"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "block"
+      }
+    ],
+   "rule_set": [
+      {
+        "tag": "geosite-category-ads-all",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "download_detour": "direct"
+      }
+    ],
+    "final": "direct",
+  }
 }' > /root/sbox/sbconfig_server.json
 
 
