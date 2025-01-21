@@ -824,7 +824,7 @@ jq -n --arg listen_port "$listen_port" --arg vmess_port "$vmess_port" --arg vmes
       "tls": {
         "enabled": true,
         "server_name": $server_name,
-          "reality": {
+        "reality": {
           "enabled": true,
           "handshake": {
             "server": $server_name,
@@ -836,39 +836,39 @@ jq -n --arg listen_port "$listen_port" --arg vmess_port "$vmess_port" --arg vmes
       }
     },
     {
-        "type": "hysteria2",
-        "tag": "hy2-in",
-        "listen": "::",
-        "listen_port": ($hy_listen_port | tonumber),
-        "users": [
-            {
-                "password": $hy_password
-            }
-        ],
-        "tls": {
-            "enabled": true,
-            "alpn": [
-                "h3"
-            ],
-            "certificate_path": "/root/self-cert/cert.pem",
-            "key_path": "/root/self-cert/private.key"
+      "type": "hysteria2",
+      "tag": "hy2-in",
+      "listen": "::",
+      "listen_port": ($hy_listen_port | tonumber),
+      "users": [
+        {
+          "password": $hy_password
         }
+      ],
+      "tls": {
+        "enabled": true,
+        "alpn": [
+          "h3"
+        ],
+        "certificate_path": "/root/self-cert/cert.pem",
+        "key_path": "/root/self-cert/private.key"
+      }
     },
     {
-        "type": "vmess",
-        "tag": "vmess-in",
-        "listen": "::",
-        "listen_port": ($vmess_port | tonumber),
-        "users": [
-            {
-                "uuid": $vmess_uuid,
-                "alterId": 0
-            }
-        ],
-        "transport": {
-            "type": "ws",
-            "path": $ws_path
+      "type": "vmess",
+      "tag": "vmess-in",
+      "listen": "::",
+      "listen_port": ($vmess_port | tonumber),
+      "users": [
+        {
+          "uuid": $vmess_uuid,
+          "alterId": 0
         }
+      ],
+      "transport": {
+        "type": "ws",
+        "path": $ws_path
+      }
     }
   ],
   "outbounds": [
@@ -880,8 +880,8 @@ jq -n --arg listen_port "$listen_port" --arg vmess_port "$vmess_port" --arg vmes
       "type": "block",
       "tag": "block"
     }
-  ]
-"route": {
+  ],
+  "route": {
     "rules": [
       {
         "rule_set": "geosite-category-ads-all",
@@ -892,7 +892,7 @@ jq -n --arg listen_port "$listen_port" --arg vmess_port "$vmess_port" --arg vmes
         "outbound": "block"
       }
     ],
-   "rule_set": [
+    "rule_set": [
       {
         "tag": "geosite-category-ads-all",
         "type": "remote",
@@ -902,6 +902,7 @@ jq -n --arg listen_port "$listen_port" --arg vmess_port "$vmess_port" --arg vmes
       }
     ],
     "final": "direct"
+  }
 }' > /root/sbox/sbconfig_server.json
 
 
