@@ -902,7 +902,6 @@ jq -n --arg listen_port "$listen_port" --arg vmess_port "$vmess_port" --arg vmes
       }
     ],
     "final": "direct"
-  }
 }' > /root/sbox/sbconfig_server.json
 
 
