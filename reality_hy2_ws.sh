@@ -512,6 +512,10 @@ cat << EOF
       "type": "block"
     },
     {
+      "tag": "dns-out",
+      "type": "dns"
+    },
+    {
       "tag": "urltest",
       "type": "urltest",
       "outbounds": [
@@ -528,7 +532,7 @@ cat << EOF
         "outbound": "block"
       },
       {
-        "action": "hijack-dns",
+        "outbound": "dns-out",
         "protocol": "dns"
       },
       {
