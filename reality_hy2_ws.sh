@@ -360,6 +360,10 @@ cat << EOF
                 "address": "https://223.5.5.5/dns-query",
                 "detour": "direct"
             },
+            {
+                "address": "rcode://success",
+                "tag": "block"
+            }
         ],
         "rules": [
             {
@@ -505,6 +509,14 @@ cat << EOF
       "type": "direct"
     },
     {
+      "tag": "block",
+      "type": "block"
+    },
+    {
+      "tag": "dns-out",
+      "type": "dns"
+    },
+    {
       "tag": "urltest",
       "type": "urltest",
       "outbounds": [
@@ -522,7 +534,7 @@ cat << EOF
         "method": "drop"
       },
       {
-        "action": "hijack-dns",
+        "outbound": "dns-out",
         "protocol": "dns"
       },
       {
