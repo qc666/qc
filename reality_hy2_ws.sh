@@ -529,6 +529,14 @@ cat << EOF
         "protocol": "dns"
       },
       {
+        "clash_mode": "direct",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "global",
+        "outbound": "select"
+      },
+      {
         "rule_set": [
              "geoip-cn"
         ],
