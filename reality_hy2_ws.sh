@@ -359,16 +359,13 @@ cat << EOF
                 "tag": "local",
                 "address": "https://223.5.5.5/dns-query",
                 "detour": "direct"
-            },
-            {
-                "address": "rcode://success",
-                "tag": "block"
             }
         ],
         "rules": [
             {
                 "rule_set": "geosite-category-ads-all",
-                "server": "block"
+                "action": "reject",
+		"method": "drop"
             },
 	    {
             "rule_set": "geosite-gfw",
@@ -386,12 +383,11 @@ cat << EOF
     "inbounds": [
         {
             "type": "tun",
+	    "tag": "tun-in",
              "address": [
                        "172.19.0.1/30",
                        "fdfe:dcba:9876::1/126"
             ],
-            "sniff": true,
-            "sniff_override_destination": true,
             "domain_strategy": "prefer_ipv4",
             "stack": "mixed",
             "strict_route": true,
@@ -403,8 +399,6 @@ cat << EOF
             "type": "socks",
             "tag": "socks-in",
             "listen": "127.0.0.1",
-            "sniff": true,
-            "sniff_override_destination": true,
             "domain_strategy": "prefer_ipv4",
             "listen_port": 2333,
             "users": []
@@ -412,8 +406,6 @@ cat << EOF
         {
             "type": "mixed",
             "tag": "mixed-in",
-            "sniff": true,
-            "sniff_override_destination": true,
             "domain_strategy": "prefer_ipv4",
             "listen": "127.0.0.1",
             "listen_port": 2334,
@@ -508,14 +500,6 @@ cat << EOF
       "type": "direct"
     },
     {
-      "tag": "block",
-      "type": "block"
-    },
-    {
-      "tag": "dns-out",
-      "type": "dns"
-    },
-    {
       "tag": "urltest",
       "type": "urltest",
       "outbounds": [
@@ -528,20 +512,21 @@ cat << EOF
   "route": {
     "rules": [
       {
+      	"inbound": [
+                    "tun-in",
+		    "socks-in,
+      		    "mixed-in"
+	    ],
+        "action": "sniff"
+      },
+      {
         "rule_set": "geosite-category-ads-all",
-        "outbound": "block"
+	"action": "reject",
+  	"method": "drop"
       },
       {
-        "outbound": "dns-out",
+        "action": "hijack-dns",
         "protocol": "dns"
-      },
-      {
-        "clash_mode": "direct",
-        "outbound": "direct"
-      },
-      {
-        "clash_mode": "global",
-        "outbound": "select"
       },
       {
         "rule_set": [
