@@ -458,7 +458,7 @@ cat << EOF
             "tag": "sing-box-hysteria2",
             
             "up_mbps": 100,
-            "down_mbps": 100,
+            "down_mbps": 500,
             "password": "$hy_password",
             "tls": {
                 "enabled": true,
@@ -514,7 +514,7 @@ cat << EOF
       {
       	"inbound": [
                     "tun-in",
-		    "socks-in,
+		    "socks-in",
       		    "mixed-in"
 	    ],
         "action": "sniff"
