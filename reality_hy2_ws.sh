@@ -368,8 +368,7 @@ cat << EOF
         "rules": [
             {
                 "rule_set": "geosite-category-ads-all",
-                "action": "reject",
-                "method": "drop"
+                "server": "block"
             },
 	    {
             "rule_set": "geosite-gfw",
@@ -513,10 +512,6 @@ cat << EOF
       "type": "block"
     },
     {
-      "tag": "dns-out",
-      "type": "dns"
-    },
-    {
       "tag": "urltest",
       "type": "urltest",
       "outbounds": [
@@ -530,11 +525,10 @@ cat << EOF
     "rules": [
       {
         "rule_set": "geosite-category-ads-all",
-        "action": "reject",
-        "method": "drop"
+        "outbound": "block"
       },
       {
-        "outbound": "dns-out",
+        "action": "hijack-dns",
         "protocol": "dns"
       },
       {
