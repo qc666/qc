@@ -359,26 +359,20 @@ cat << EOF
                 "tag": "local",
                 "address": "https://223.5.5.5/dns-query",
                 "detour": "direct"
-            }
+            },
         ],
         "rules": [
             {
                 "rule_set": "geosite-category-ads-all",
-		"action": "reject",
-  		"method": "drop"
+                "action": "reject",
+                "method": "drop"
             },
 	    {
-            "rule_set": [
-	    	"geosite-gfw"
-	    ],
-     	    "action": "route",
+            "rule_set": "geosite-gfw",
             "server": "google"
 	    },
             {
-            "rule_set": [
-		"geoip-cn"
- 	    ],
-      	    "action": "route",
+            "rule_set": "geoip-cn",
             "server": "local"
 	    }
         ],
@@ -389,11 +383,12 @@ cat << EOF
     "inbounds": [
         {
             "type": "tun",
-	    "tag": "tun-in", 
              "address": [
                        "172.19.0.1/30",
                        "fdfe:dcba:9876::1/126"
             ],
+            "sniff": true,
+            "sniff_override_destination": true,
             "domain_strategy": "prefer_ipv4",
             "stack": "mixed",
             "strict_route": true,
@@ -467,8 +462,8 @@ cat << EOF
             "server_port": $hy_current_listen_port,
             "tag": "sing-box-hysteria2",
             
-            "up_mbps": 200,
-            "down_mbps": 300,
+            "up_mbps": 100,
+            "down_mbps": 100,
             "password": "$hy_password",
             "tls": {
                 "enabled": true,
@@ -506,8 +501,6 @@ cat << EOF
             "uuid": "$vmess_uuid"
         },
     {
-    },
-    {
       "tag": "direct",
       "type": "direct"
     },
@@ -524,17 +517,21 @@ cat << EOF
   "route": {
     "rules": [
       {
-      	"inbound": "tun-in",
-        "action": "sniff"
-      },
-      {
         "rule_set": "geosite-category-ads-all",
-	"action": "reject",
-  	"method": "drop"
+        "action": "reject",
+        "method": "drop"
       },
       {
         "action": "hijack-dns",
         "protocol": "dns"
+      },
+      {
+        "clash_mode": "direct",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "global",
+        "outbound": "select"
       },
       {
         "rule_set": [
